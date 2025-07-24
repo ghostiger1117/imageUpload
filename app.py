@@ -20,9 +20,9 @@ def upload_image():
     file = request.files['image']
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
-    filename = secure_filename(file.filename)
-    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    return jsonify({'message': 'Image uploaded successfully', 'filename': filename})
+    filename = secure_filename(file.originalname)
+    file.save(os.path.join(app.config['UPLOAD_FOLDER'], originalname))
+    return jsonify({'message': 'Image uploaded successfully', 'filename': originalname})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=1117) 
