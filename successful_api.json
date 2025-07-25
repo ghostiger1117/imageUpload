@@ -1,0 +1,593 @@
+{
+  "1": {
+    "inputs": {
+      "ckpt_name": "realisticVisionV51_v51VAE.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Load Checkpoint"
+    }
+  },
+  "2": {
+    "inputs": {
+      "vae_name": "vae-ft-mse-840000-ema-pruned.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "3": {
+    "inputs": {
+      "ipadapter_file": "ip-adapter-plus_sd15.safetensors"
+    },
+    "class_type": "IPAdapterModelLoader",
+    "_meta": {
+      "title": "IPAdapter Model Loader"
+    }
+  },
+  "4": {
+    "inputs": {
+      "clip_name": "IPAdapter_image_encoder_sd15.safetensors"
+    },
+    "class_type": "CLIPVisionLoader",
+    "_meta": {
+      "title": "Load CLIP Vision"
+    }
+  },
+  "6": {
+    "inputs": {
+      "image": "WhatsApp Image 2025-07-21 at 5.23.49 PM.jpeg",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "7": {
+    "inputs": {
+      "text": "Extract character features from image that is drawn with pen by children",
+      "clip": [
+        "1",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "8": {
+    "inputs": {
+      "text": "A full-body portrait of character in a bright, detailed anime style, consistent facial features, consistent hairstyle, consistent clothing, clean background, high quality, vibrant colors.",
+      "clip": [
+        "1",
+        1
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP Text Encode (Prompt)"
+    }
+  },
+  "9": {
+    "inputs": {
+      "seed": 27,
+      "steps": 30,
+      "cfg": 6,
+      "sampler_name": "ddim",
+      "scheduler": "ddim_uniform",
+      "denoise": 1,
+      "model": [
+        "19",
+        0
+      ],
+      "positive": [
+        "16",
+        0
+      ],
+      "negative": [
+        "8",
+        0
+      ],
+      "latent_image": [
+        "10",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "10": {
+    "inputs": {
+      "width": 512,
+      "height": 512,
+      "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": {
+      "title": "Empty Latent Image"
+    }
+  },
+  "11": {
+    "inputs": {
+      "samples": [
+        "9",
+        0
+      ],
+      "vae": [
+        "2",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "12": {
+    "inputs": {
+      "filename_prefix": "IPAdapter",
+      "images": [
+        "11",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Image"
+    }
+  },
+  "13": {
+    "inputs": {
+      "low_threshold": 0.1,
+      "high_threshold": 0.5,
+      "image": [
+        "14",
+        0
+      ]
+    },
+    "class_type": "Canny",
+    "_meta": {
+      "title": "Canny"
+    }
+  },
+  "14": {
+    "inputs": {
+      "image": "WhatsApp Image 2025-07-21 at 5.23.49 PM.jpeg",
+      "upload": "image"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Load Image"
+    }
+  },
+  "15": {
+    "inputs": {
+      "control_net_name": "control_v11p_sd15_canny_fp16.safetensors"
+    },
+    "class_type": "ControlNetLoader",
+    "_meta": {
+      "title": "Load ControlNet Model"
+    }
+  },
+  "16": {
+    "inputs": {
+      "strength": 0.8,
+      "conditioning": [
+        "7",
+        0
+      ],
+      "control_net": [
+        "15",
+        0
+      ],
+      "image": [
+        "13",
+        0
+      ]
+    },
+    "class_type": "ControlNetApply",
+    "_meta": {
+      "title": "Apply ControlNet (OLD)"
+    }
+  },
+  "17": {
+    "inputs": {
+      "images": [
+        "13",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "19": {
+    "inputs": {
+      "weight": 1,
+      "weight_type": "linear",
+      "combine_embeds": "concat",
+      "start_at": 0,
+      "end_at": 1,
+      "embeds_scaling": "V only",
+      "model": [
+        "1",
+        0
+      ],
+      "ipadapter": [
+        "3",
+        0
+      ],
+      "image": [
+        "6",
+        0
+      ],
+      "clip_vision": [
+        "4",
+        0
+      ]
+    },
+    "class_type": "IPAdapterAdvanced",
+    "_meta": {
+      "title": "IPAdapter Advanced"
+    }
+  },
+  "31": {
+    "inputs": {
+      "prompt": "Simplified rendered image with few details.\nUse simple descriptors (e.g., \"cartoon character with simple features\").",
+      "api_key": "",
+      "model": "gpt-image-1",
+      "size": "1024x1024",
+      "quality": "low",
+      "image": [
+        "11",
+        0
+      ]
+    },
+    "class_type": "OpenAI Image API",
+    "_meta": {
+      "title": "OpenAI Image API with gpt-image-1"
+    }
+  },
+  "32": {
+    "inputs": {
+      "prompt": "Default rendered image with standard detail and features.\nUse medium detail (e.g., \"cartoon character with normal detailing and color\").",
+      "api_key": "",
+      "model": "gpt-image-1",
+      "size": "1024x1024",
+      "quality": "medium",
+      "image": [
+        "11",
+        0
+      ]
+    },
+    "class_type": "OpenAI Image API",
+    "_meta": {
+      "title": "OpenAI Image API with gpt-image-1"
+    }
+  },
+  "33": {
+    "inputs": {
+      "prompt": "Highly detailed character rendering with advanced textures, shadows, and features.\nUse high-level descriptions (e.g., \"detailed cartoon character with intricate features, shading, and textures\").",
+      "api_key": "",
+      "model": "gpt-image-1",
+      "size": "1024x1024",
+      "quality": "high",
+      "image": [
+        "11",
+        0
+      ]
+    },
+    "class_type": "OpenAI Image API",
+    "_meta": {
+      "title": "OpenAI Image API with gpt-image-1"
+    }
+  },
+  "34": {
+    "inputs": {
+      "filename_prefix": "ComfyUI",
+      "images": [
+        "31",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Image"
+    }
+  },
+  "35": {
+    "inputs": {
+      "filename_prefix": "ComfyUI",
+      "images": [
+        "32",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Image"
+    }
+  },
+  "36": {
+    "inputs": {
+      "filename_prefix": "ComfyUI",
+      "images": [
+        "33",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Save Image"
+    }
+  },
+  "66": {
+    "inputs": {
+      "prompt": "A same cartoon character in a forest with magical elements.",
+      "api_key": "",
+      "model": "gpt-image-1",
+      "size": "1024x1024",
+      "quality": "low",
+      "image": [
+        "31",
+        0
+      ]
+    },
+    "class_type": "OpenAI Image API",
+    "_meta": {
+      "title": "OpenAI Image API with gpt-image-1"
+    }
+  },
+  "67": {
+    "inputs": {
+      "prompt": "The same cartoon character in a futuristic city with neon lights.",
+      "api_key": "",
+      "model": "gpt-image-1",
+      "size": "1024x1024",
+      "quality": "low",
+      "image": [
+        "31",
+        0
+      ]
+    },
+    "class_type": "OpenAI Image API",
+    "_meta": {
+      "title": "OpenAI Image API with gpt-image-1"
+    }
+  },
+  "68": {
+    "inputs": {
+      "prompt": "A same cartoon character in a forest with magical elements.",
+      "api_key": "",
+      "model": "gpt-image-1",
+      "size": "1024x1024",
+      "quality": "low",
+      "image": [
+        "32",
+        0
+      ]
+    },
+    "class_type": "OpenAI Image API",
+    "_meta": {
+      "title": "OpenAI Image API with gpt-image-1"
+    }
+  },
+  "69": {
+    "inputs": {
+      "prompt": "The same cartoon character in a futuristic city with neon lights.",
+      "api_key": "",
+      "model": "gpt-image-1",
+      "size": "1024x1024",
+      "quality": "low",
+      "image": [
+        "32",
+        0
+      ]
+    },
+    "class_type": "OpenAI Image API",
+    "_meta": {
+      "title": "OpenAI Image API with gpt-image-1"
+    }
+  },
+  "70": {
+    "inputs": {
+      "prompt": "A same cartoon character in a forest with magical element.",
+      "api_key": "",
+      "model": "gpt-image-1",
+      "size": "1024x1024",
+      "quality": "low",
+      "image": [
+        "33",
+        0
+      ]
+    },
+    "class_type": "OpenAI Image API",
+    "_meta": {
+      "title": "OpenAI Image API with gpt-image-1"
+    }
+  },
+  "71": {
+    "inputs": {
+      "prompt": "The same cartoon character in a futuristic city with neon light.",
+      "api_key": "",
+      "model": "gpt-image-1",
+      "size": "1024x1024",
+      "quality": "low",
+      "image": [
+        "33",
+        0
+      ]
+    },
+    "class_type": "OpenAI Image API",
+    "_meta": {
+      "title": "OpenAI Image API with gpt-image-1"
+    }
+  },
+  "72": {
+    "inputs": {
+      "images": [
+        "67",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "73": {
+    "inputs": {
+      "images": [
+        "70",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "74": {
+    "inputs": {
+      "images": [
+        "71",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "75": {
+    "inputs": {
+      "images": [
+        "68",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "76": {
+    "inputs": {
+      "images": [
+        "66",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "77": {
+    "inputs": {
+      "images": [
+        "69",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "Preview Image"
+    }
+  },
+  "83": {
+    "inputs": {
+      "resnet_model": "resnet152",
+      "threshold": 0.7,
+      "image_1": [
+        "71",
+        0
+      ],
+      "image_2": [
+        "70",
+        0
+      ]
+    },
+    "class_type": "Image Similarity",
+    "_meta": {
+      "title": "Image Similarity"
+    }
+  },
+  "84": {
+    "inputs": {
+      "prefix": "",
+      "suffix": "",
+      "input": [
+        "89",
+        0
+      ]
+    },
+    "class_type": "SomethingToString",
+    "_meta": {
+      "title": "Something To String"
+    }
+  },
+  "85": {
+    "inputs": {
+      "prefix": "",
+      "suffix": "",
+      "input": [
+        "83",
+        1
+      ]
+    },
+    "class_type": "SomethingToString",
+    "_meta": {
+      "title": "Something To String"
+    }
+  },
+  "86": {
+    "inputs": {
+      "text": [
+        "84",
+        0
+      ],
+      "text_1": "58.69"
+    },
+    "class_type": "ShowText|pysssss",
+    "_meta": {
+      "title": "Show Text 🐍"
+    }
+  },
+  "87": {
+    "inputs": {
+      "text": [
+        "85",
+        0
+      ],
+      "text_1": "0.5867174863815308"
+    },
+    "class_type": "ShowText|pysssss",
+    "_meta": {
+      "title": "Show Text 🐍"
+    }
+  },
+  "89": {
+    "inputs": {
+      "detect_method": "face_recognition",
+      "image1": [
+        "70",
+        0
+      ],
+      "image2": [
+        "71",
+        0
+      ]
+    },
+    "class_type": "Face Similarity",
+    "_meta": {
+      "title": "Face Similarity"
+    }
+  }
+}
